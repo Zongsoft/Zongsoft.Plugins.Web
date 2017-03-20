@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<plugin name="Web"
+        title="Web Plugin"
+        author="Popeye Zhong(zongsoft@gmail.com)"
+        version="4.4.0.1703"
+        copyright="Copyright (C) 2010-2017 Zongsoft Corporation. All rights reserved."
+        description="Created Date: 2012-9-20 by Popeye Zhong, Modified Date: 2017-03">
+
+	<manifest>
+		<dependencies>
+			<dependency name="Main"/>
+		</dependencies>
+
+		<assemblies>
+			<assembly name="Zongsoft.Plugins.Web" />
+		</assemblies>
+	</manifest>
+
+	<builders>
+		<builder name="route" type="Zongsoft.Plugins.Web.Builders.RouteBuilder, Zongsoft.Plugins.Web" />
+		<builder name="ignore" type="Zongsoft.Plugins.Web.Builders.RouteIgnoreBuilder, Zongsoft.Plugins.Web" />
+
+		<builder name="form" type="Zongsoft.Plugins.Web.Builders.HtmlFormBuilder, Zongsoft.Plugins.Web" />
+		<builder name="control" type="Zongsoft.Plugins.Web.Builders.UserControlBuilder, Zongsoft.Plugins.Web" />
+		<builder name="sitemap" type="Zongsoft.Plugins.Web.Builders.SitemapBuilder, Zongsoft.Plugins.Web" />
+		<builder name="menu" type="Zongsoft.Plugins.Web.Builders.TreeViewBuilder, Zongsoft.Plugins.Web" />
+		<builder name="menuItem" type="Zongsoft.Plugins.Web.Builders.TreeViewNodeBuilder, Zongsoft.Plugins.Web" />
+		<builder name="tree" type="Zongsoft.Plugins.Web.Builders.TreeViewBuilder, Zongsoft.Plugins.Web" />
+		<builder name="node" type="Zongsoft.Plugins.Web.Builders.TreeViewNodeBuilder, Zongsoft.Plugins.Web" />
+	</builders>
+
+	<!-- 初始化Web基础环境设置 -->
+	<extension path="/Workbench">
+		<!-- 设置Web控制器工厂 -->
+		<web.controllerFactory>
+			<object type="Zongsoft.Web.PluginControllerFactory, Zongsoft.Plugins.Web" />
+		</web.controllerFactory>
+
+		<!-- 设置Web过滤器提供程序 -->
+		<web.filterProvider>
+			<object type="Zongsoft.Web.PluginFilterProvider, Zongsoft.Plugins.Web" />
+		</web.filterProvider>
+
+		<!-- 设置Web路由提供程序 -->
+		<web.routeProvider>
+			<object type="Zongsoft.Web.Routing.PluginRouteProvider, Zongsoft.Plugins.Web" />
+		</web.routeProvider>
+	</extension>
+
+	<!-- 初始化Web.Api基础环境设置 -->
+	<extension path="/Workbench/Web">
+		<!-- 设置API行为选择器 -->
+		<api.actionSelector>
+			<object type="Zongsoft.Web.Http.PluginHttpActionSelector, Zongsoft.Plugins.Web" />
+		</api.actionSelector>
+
+		<!-- 设置API控制器选择器 -->
+		<api.controllerSelector>
+			<object type="Zongsoft.Web.Http.PluginHttpControllerSelector, Zongsoft.Plugins.Web" />
+		</api.controllerSelector>
+
+		<!-- 设置API过滤器提供程序 -->
+		<api.filterProvider>
+			<object type="Zongsoft.Web.Http.PluginHttpFilterProvider, Zongsoft.Plugins.Web" />
+		</api.filterProvider>
+	</extension>
+
+	<!-- 挂载Web视图引擎-->
+	<extension path="/Workbench/Web/ViewEngines">
+		<object name="Razor" type="Zongsoft.Web.PluginRazorViewEngine, Zongsoft.Plugins.Web" />
+		<object name="WebForm" type="Zongsoft.Web.PluginWebFormViewEngine, Zongsoft.Plugins.Web" />
+	</extension>
+
+	<!-- 挂载Web路由项设置-->
+	<extension path="/Workbench/Web/Routes">
+		<ignore name="axd"
+		        url="{resource}.axd/{*pathInfo}" />
+
+		<route name="PluginExplorer"
+		       url="PluginExplorer/{action}"
+		       defaults="controller=PluginExplorer" />
+
+		<route name="Api" kind="api"
+		       url="api/{controller}/{action}/{id}/{*args}"
+		       constraints="action=^[A-Za-z]+\w*$"
+		       defaults="action=, id=" />
+
+		<route name="ApiReversed" kind="api"
+		       url="api/{controller}/{id}/{action}/{*args}"
+		       defaults="action=, id=" />
+
+		<route name="Default"
+		       url="{controller}/{action}/{id}"
+		       constraints="action=^[A-Za-z]+\w*$"
+		       defaults="controller=Home, action=Index, id=" />
+
+		<route name="DefaultReversed"
+		       url="{controller}/{id}/{action}"
+		       defaults="controller=Home, action=Index" />
+	</extension>
+
+	<!-- 挂载Web全局过滤器 -->
+	<extension path="/Workspace/Web/Filters">
+		<object name="AuthorizationFilter" type="Zongsoft.Web.Security.AuthorizationFilter, Zongsoft.Web" />
+		<object name="AuthenticationFilter" type="Zongsoft.Web.Security.AuthenticationFilter, Zongsoft.Web" />
+		<object name="InputValidationFilter" type="Zongsoft.Web.InputValidationFilter, Zongsoft.Web" method="POST, PUT" />
+	</extension>
+
+	<!-- 挂载Web.Api全局过滤器 -->
+	<extension path="/Workspace/Web/Filters/Api">
+		<object name="AuthenticationFilter" type="Zongsoft.Web.Http.Security.AuthenticationFilter, Zongsoft.Web" />
+	</extension>
+
+	<!-- 挂载Web控制器 -->
+	<extension path="/Workspace/Web/Controllers">
+		<!-- 挂载插件管理器的控制器 -->
+		<object name="PluginExplorer" type="Zongsoft.Plugins.Web.Controllers.PluginExplorerController, Zongsoft.Plugins.Web" />
+	</extension>
+
+	<!-- 挂载文件系统的Web.Api控制器 -->
+	<extension path="/Workspace/Web/Controllers/Api">
+		<!-- 如果使用阿里云OSS则basePath的属性设置为：basePath="zfs.oss:/automao-data/" -->
+		<object name="File" basePath="zfs.web:/data/" type="Zongsoft.Web.Http.Controllers.FileController, Zongsoft.Web" />
+		<object name="Directory" basePath="zfs.web:/data/" type="Zongsoft.Web.Http.Controllers.DirectoryController, Zongsoft.Web" />
+	</extension>
+
+	<!-- 挂载Web文件系统 -->
+	<extension path="/Workbench/FileSystem">
+		<object name="WebFileSystem" value="{static:Zongsoft.Web.WebFileSystem.Instance, Zongsoft.Web}">
+			<!-- 将Web文件系统作为当前应用的默认文件系统 -->
+			<object.property name="Scheme" target="{type:Zongsoft.IO.FileSystem, Zongsoft.CoreLibrary}" value="{path:./@Scheme}" />
+		</object>
+	</extension>
+
+	<!-- 添加默认页面元素(主菜单、导航栏、站点映射) -->
+	<extension path="/Workbench">
+		<menu name="MainMenu" cssClass="ui menu" isDropdown="true" RenderMode="BulletList" place="HeaderPlaceHolder.MenubarPlaceHolder" />
+		<menu name="Express" cssClass="right menu express" isDropdown="true" place="HeaderPlaceHolder.ExpressPlaceHolder" />
+		<tree name="Navigator" cssClass="ui vertical sidebar menu navigator" RenderMode="BulletList" place="BodyPlaceHolder.OutlinePlaceHolder" />
+		<sitemap name="Sitemap" cssClass="ui breadcrumb sitemap" place="BodyPlaceHolder.SitemapPlaceHolder" path="/Workbench/Sitemap/Home" />
+
+		<form name="__ThemeForm__" action="${Request.Path}" method="GET" place="HeaderPlaceHolder.ExpressPlaceHolder">
+			<control name="__theme__" type="Zongsoft.Web.Controls.ComboBox, Zongsoft.Web" AutoSubmit="True" DataSource="${Items[__themes__]}" SelectedValue="${Items[__theme__]}" CssClass="themes" />
+		</form>
+	</extension>
+
+	<!-- 在主菜单中添加首页菜单项 -->
+	<extension path="/Workbench/MainMenu">
+		<menuItem name="Home" text="{res:Text.HomePage}" icon="Home" url="/" />
+	</extension>
+
+	<!-- 在站点映射中添加首页项 -->
+	<extension path="/Workbench/Sitemap">
+		<node name="Home" text="{res:Text.HomePage}" icon="Home" url="/" />
+	</extension>
+</plugin>

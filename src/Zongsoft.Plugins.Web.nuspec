@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://www.gnu.org/licenses/lgpl-2.1.html</licenseUrl>
+    <projectUrl>https://github.com/Zongsoft/Zongsoft.Plugins.Web</projectUrl>
+    <iconUrl>https://avatars.githubusercontent.com/u/4804332</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <summary>提供Web应用插件化的基础功能。</summary>
+    <releaseNotes>提供Web应用插件化的基础功能。</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>Zongsoft Web Plugin</tags>
+    <dependencies>
+        <dependency id="Zongsoft.CoreLibrary" version="4.2" />
+        <dependency id="Zongsoft.Plugins" version="4.2" />
+        <dependency id="Zongsoft.Web" version="4.2" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Web.plugin" target="content\plugins\Web.plugin" />
+    <file src="Views\pluginexplorer.index.aspx" target="content\plugins\views\pluginexplorer.index.aspx" />
+  </files>
+</package>
