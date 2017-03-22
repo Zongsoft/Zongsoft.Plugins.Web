@@ -104,11 +104,11 @@
 	<extension path="/Workspace/Web/Filters">
 		<object name="AuthorizationFilter" type="Zongsoft.Web.Security.AuthorizationFilter, Zongsoft.Web" />
 		<object name="AuthenticationFilter" type="Zongsoft.Web.Security.AuthenticationFilter, Zongsoft.Web" />
-		<object name="InputValidationFilter" type="Zongsoft.Web.InputValidationFilter, Zongsoft.Web" method="POST, PUT" />
 	</extension>
 
 	<!-- 挂载Web.Api全局过滤器 -->
 	<extension path="/Workspace/Web/Filters/Api">
+		<object name="AuthorizationFilter" type="Zongsoft.Web.Http.Security.AuthorizationFilter, Zongsoft.Web" />
 		<object name="AuthenticationFilter" type="Zongsoft.Web.Http.Security.AuthenticationFilter, Zongsoft.Web" />
 	</extension>
 
