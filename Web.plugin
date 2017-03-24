@@ -108,6 +108,7 @@
 
 	<!-- 挂载Web.Api全局过滤器 -->
 	<extension path="/Workspace/Web/Filters/Api">
+		<object name="ExceptionFilter" type="Zongsoft.Web.Http.ExceptionFilter, Zongsoft.Web" />
 		<object name="AuthorizationFilter" type="Zongsoft.Web.Http.Security.AuthorizationFilter, Zongsoft.Web" />
 		<object name="AuthenticationFilter" type="Zongsoft.Web.Http.Security.AuthenticationFilter, Zongsoft.Web" />
 	</extension>
