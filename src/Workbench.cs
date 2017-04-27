@@ -76,6 +76,8 @@ namespace Zongsoft.Plugins.Web
 
 			//更改序列化器的默认设置
 			GlobalConfiguration.Configuration.Formatters.XmlFormatter.UseXmlSerializer = true;
+			GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
 			var contractResolver = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver as Newtonsoft.Json.Serialization.DefaultContractResolver;
 			if(contractResolver != null)
 				contractResolver.IgnoreSerializableAttribute = true;
