@@ -60,6 +60,11 @@
 			<object type="Zongsoft.Web.Http.PluginHttpControllerSelector, Zongsoft.Plugins.Web" />
 		</api.controllerSelector>
 
+		<!-- 设置API内容格式化器 -->
+		<api.jsonFormatter>
+			<object type="Zongsoft.Web.Http.JsonMediaTypeFormatter, Zongsoft.Web" />
+		</api.jsonFormatter>
+
 		<!-- 设置API过滤器提供程序 -->
 		<api.filterProvider>
 			<object type="Zongsoft.Web.Http.PluginHttpFilterProvider, Zongsoft.Plugins.Web" />

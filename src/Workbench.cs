@@ -25,12 +25,18 @@
  */
 
 using System;
+using System.IO;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Http;
 using System.Web.Http.Routing;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.Controllers;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Zongsoft.Plugins.Web
 {
@@ -74,13 +80,18 @@ namespace Zongsoft.Plugins.Web
 				}
 			}
 
-			//更改序列化器的默认设置
+			//启用XML序列化器，否则会导致未显式指定内容格式的请求无法序列化
 			GlobalConfiguration.Configuration.Formatters.XmlFormatter.UseXmlSerializer = true;
-			GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 
-			var contractResolver = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver as Newtonsoft.Json.Serialization.DefaultContractResolver;
-			if(contractResolver != null)
-				contractResolver.IgnoreSerializableAttribute = true;
+			//初始化JSON格式化器的参数
+			if(GlobalConfiguration.Configuration.Formatters.JsonFormatter != null)
+			{
+				GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+				var contractResolver = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver as Newtonsoft.Json.Serialization.DefaultContractResolver;
+				if(contractResolver != null)
+					contractResolver.IgnoreSerializableAttribute = true;
+			}
 
 			//调用基类同名方法，以启动工作台下Startup下的所有工作者
 			base.OnStart(args);
@@ -180,6 +191,7 @@ namespace Zongsoft.Plugins.Web
 			#endregion
 
 			#region 成员字段
+			private MediaTypeFormatter _jsonFormatter;
 			private System.Web.Http.Filters.IFilterProvider _filterProvider;
 			#endregion
 
@@ -217,6 +229,30 @@ namespace Zongsoft.Plugins.Web
 						throw new ArgumentNullException();
 
 					GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerSelector), value);
+				}
+			}
+
+			public MediaTypeFormatter JsonFormatter
+			{
+				get
+				{
+					return _jsonFormatter;
+				}
+				set
+				{
+					if(value == null)
+						throw new ArgumentNullException();
+
+					var jsonFormatter = Interlocked.Exchange(ref _jsonFormatter, value);
+
+					//如果原来没有设置过JSON格式化器，则必须将系统内置的JSON格式化器移除，否则新设置的JSON格式化器无法生效
+					if(jsonFormatter == null)
+						GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.JsonFormatter);
+					else
+						GlobalConfiguration.Configuration.Formatters.Remove(jsonFormatter);
+
+					//将新设置的格式化器加入到系统格式化器列表中
+					GlobalConfiguration.Configuration.Formatters.Add(value);
 				}
 			}
 
