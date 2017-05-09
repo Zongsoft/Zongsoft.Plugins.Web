@@ -81,7 +81,8 @@ namespace Zongsoft.Plugins.Web
 			}
 
 			//启用XML序列化器，否则会导致未显式指定内容格式的请求无法序列化
-			GlobalConfiguration.Configuration.Formatters.XmlFormatter.UseXmlSerializer = true;
+			GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+			//GlobalConfiguration.Configuration.Formatters.XmlFormatter.UseXmlSerializer = false;
 
 			//初始化JSON格式化器的参数
 			if(GlobalConfiguration.Configuration.Formatters.JsonFormatter != null)
