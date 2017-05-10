@@ -114,8 +114,13 @@ namespace Zongsoft.Web.Routing
 				case "":
 				case "web":
 				case null:
-					if(token.Handler == null && token.Ignored)
-						token.Handler = new System.Web.Routing.StopRoutingHandler();
+					if(token.Handler == null)
+					{
+						if(token.Ignored)
+							token.Handler = new System.Web.Routing.StopRoutingHandler();
+						else
+							token.Handler = new System.Web.Mvc.MvcRouteHandler();
+					}
 
 					return new Route(
 						token.Url,

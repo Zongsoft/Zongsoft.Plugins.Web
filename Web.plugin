@@ -32,6 +32,11 @@
 
 	<!-- 初始化Web基础环境设置 -->
 	<extension path="/Workbench">
+		<!-- 挂载Web配置扩展点 -->
+		<object name="Web" value="{path:/Workbench.Web}">
+			<object name="ViewEngines" value="{path:../@ViewEngines}" />
+		</object>
+
 		<!-- 设置Web控制器工厂 -->
 		<web.controllerFactory>
 			<object type="Zongsoft.Web.PluginControllerFactory, Zongsoft.Plugins.Web" />

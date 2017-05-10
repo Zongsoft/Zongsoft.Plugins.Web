@@ -43,8 +43,8 @@ namespace Zongsoft.Plugins.Web
 		private Zongsoft.Options.Configuration.OptionConfiguration _configuration;
 		#endregion
 
-		#region 私有构造
-		private ApplicationContext() : base("Zongsoft.Plugins.Web")
+		#region 保护构造
+		protected ApplicationContext() : base("Zongsoft.Plugins.Web")
 		{
 			Zongsoft.ComponentModel.ApplicationContextBase.Current = this;
 		}

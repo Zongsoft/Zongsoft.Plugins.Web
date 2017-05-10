@@ -125,7 +125,7 @@ namespace Zongsoft.Web
 
 			foreach(var child in node.Children)
 			{
-				if(!this.ContainsHttpMethod(child.Properties.GetRawValue("method"), method))
+				if(child.NodeType == Plugins.PluginTreeNodeType.Empty || !this.ContainsHttpMethod(child.Properties.GetRawValue("method"), method))
 					continue;
 
 				string name;
@@ -183,6 +183,9 @@ namespace Zongsoft.Web
 
 			foreach(var child in node.Children)
 			{
+				if(child.NodeType == Plugins.PluginTreeNodeType.Empty)
+					continue;
+
 				if(this.ContainsHttpMethod(child.Properties.GetRawValue("method"), method))
 				{
 					var filter = this.CreateFilter(child, FilterScope.Global);
