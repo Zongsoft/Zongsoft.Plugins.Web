@@ -83,7 +83,7 @@ namespace Zongsoft.Web
 				string key = match.Groups["var"].Value;
 				object value;
 
-				if(routeData.Values.TryGetValue(key, out value))
+				if(routeData.Values.TryGetValue(key, out value) && value != null)
 					return value == System.Web.Mvc.UrlParameter.Optional ? string.Empty : value.ToString();
 				else
 					return string.Empty;
