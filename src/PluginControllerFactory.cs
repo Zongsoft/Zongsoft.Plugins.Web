@@ -85,17 +85,7 @@ namespace Zongsoft.Web
 			if(node == null || node.NodeType == PluginTreeNodeType.Empty)
 				return System.Web.SessionState.SessionStateBehavior.Default;
 
-			Type controllerType = null;
-
-			switch(node.NodeType)
-			{
-				case PluginTreeNodeType.Builtin:
-					controllerType = ((Builtin)node.Value).BuiltinType.Type;
-					break;
-				case PluginTreeNodeType.Custom:
-					controllerType = node.Value == null ? null : node.Value.GetType();
-					break;
-			}
+			Type controllerType = node.ValueType;
 
 			if(controllerType == null)
 				return System.Web.SessionState.SessionStateBehavior.Default;
