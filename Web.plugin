@@ -129,13 +129,6 @@
 		<object name="PluginExplorer" type="Zongsoft.Plugins.Web.Controllers.PluginExplorerController, Zongsoft.Plugins.Web" />
 	</extension>
 
-	<!-- 挂载文件系统的Web.Api控制器 -->
-	<extension path="/Workspace/Web/Controllers/Api">
-		<!-- 如果使用阿里云OSS则basePath的属性设置为：basePath="zfs.oss:/automao-data/" -->
-		<object name="File" basePath="zfs.web:/data/" type="Zongsoft.Web.Http.Controllers.FileController, Zongsoft.Web" />
-		<object name="Directory" basePath="zfs.web:/data/" type="Zongsoft.Web.Http.Controllers.DirectoryController, Zongsoft.Web" />
-	</extension>
-
 	<!-- 挂载Web文件系统 -->
 	<extension path="/Workbench/FileSystem">
 		<object name="WebFileSystem" value="{static:Zongsoft.Web.WebFileSystem.Instance, Zongsoft.Web}">
