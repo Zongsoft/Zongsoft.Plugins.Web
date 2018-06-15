@@ -128,12 +128,11 @@ namespace Zongsoft.Web
 				if(child.NodeType == Plugins.PluginTreeNodeType.Empty || !this.ContainsHttpMethod(child.Properties.GetRawValue("method"), method))
 					continue;
 
-				string name;
 				T filter = null;
 
-				if(child.Properties.TryGetValue("action", out name))
+				if(child.Properties.TryGetValue("action", out var value) && value is string)
 				{
-					if(string.Equals(actionName, name, StringComparison.OrdinalIgnoreCase))
+					if(string.Equals(actionName, (string)value, StringComparison.OrdinalIgnoreCase))
 						filter = this.CreateFilter(child, FilterScope.Action);
 				}
 				else

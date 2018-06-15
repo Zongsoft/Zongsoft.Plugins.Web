@@ -53,7 +53,7 @@ namespace Zongsoft.Plugins.Web.Builders
 		#endregion
 
 		#region 重写方法
-		protected override void OnBuilt(BuilderContext context)
+		protected override void OnBuildComplete(BuilderContext context)
 		{
 			Control itemControl = context.Result as Control;
 

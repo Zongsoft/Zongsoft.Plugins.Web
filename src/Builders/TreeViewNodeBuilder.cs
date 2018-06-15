@@ -63,7 +63,7 @@ namespace Zongsoft.Plugins.Web.Builders
 			return node;
 		}
 
-		protected override void OnBuilt(BuilderContext context)
+		protected override void OnBuildComplete(BuilderContext context)
 		{
 			if(context.Owner == null)
 				return;
