@@ -26,9 +26,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Http;
+using System.Web.Http.Routing;
 using System.Web.Http.Controllers;
 
 using Zongsoft.Plugins;
@@ -42,27 +41,31 @@ namespace Zongsoft.Web.Http
 		#endregion
 
 		#region 构造函数
-		public PluginHttpControllerDescriptor(HttpConfiguration configuration, PluginTreeNode controllerNode)
+		public PluginHttpControllerDescriptor(HttpConfiguration configuration, PluginTreeNode controllerNode, string actionName, IHttpRouteData route)
 		{
-			if(configuration == null)
-				throw new ArgumentNullException("configuration");
+			_controllerNode = controllerNode ?? throw new ArgumentNullException(nameof(controllerNode));
 
-			if(controllerNode == null)
-				throw new ArgumentNullException("controllerNode");
-
-			_controllerNode = controllerNode;
 			this.Configuration = configuration;
 			this.ControllerName = controllerNode.Name;
+			this.ControllerType = controllerNode.ValueType;
 
-			switch(controllerNode.NodeType)
+			if(actionName != null && actionName.Length > 0 && controllerNode.Children.Count > 0)
 			{
-				case PluginTreeNodeType.Builtin:
-					this.ControllerType = ((Builtin)controllerNode.Value).BuiltinType.Type;
-					break;
-				case PluginTreeNodeType.Custom:
-					if(controllerNode.Value != null)
-						this.ControllerType = controllerNode.Value.GetType();
-					break;
+				foreach(var child in controllerNode.Children)
+				{
+					if(string.Equals(child.Name, actionName, StringComparison.OrdinalIgnoreCase))
+					{
+						route.Values["controller"] = controllerNode.Name + "." + child.Name;
+						route.Values["action"] = null;
+						route.Values["controller.path"] = child.FullPath;
+
+						_controllerNode = child;
+						this.ControllerName = child.Name;
+						this.ControllerType = child.ValueType;
+
+						break;
+					}
+				}
 			}
 		}
 		#endregion

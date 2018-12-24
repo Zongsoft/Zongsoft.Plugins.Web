@@ -66,17 +66,15 @@ namespace Zongsoft.Web.Http
 			if(routeData == null)
 				return null;
 
-			object item;
-
 			//处理路由中action可能与args错位的问题。
-			if(routeData.Values.TryGetValue("action", out item) && item != null && item is string)
+			if(routeData.Values.TryGetValue("action", out var action) && action != null)
 			{
-				foreach(var chr in (string)item)
+				foreach(var chr in (string)action)
 				{
 					//如果action包含非数字、字母及下划线字符则认为其与args错位了
 					if(!Char.IsLetterOrDigit(chr) && chr != '_')
 					{
-						routeData.Values["args"] = item;
+						routeData.Values["args"] = action;
 						routeData.Values["action"] = null;
 						break;
 					}
@@ -85,8 +83,8 @@ namespace Zongsoft.Web.Http
 
 			string areaName, controllerPath;
 
-			if(routeData.Route.DataTokens.TryGetValue("area", out item))
-				areaName = (string)item;
+			if(routeData.Route.DataTokens.TryGetValue("area", out var area))
+				areaName = (string)area;
 			else
 				areaName = VirtualPathHelper.GetArea(routeData.Route.RouteTemplate);
 
@@ -103,7 +101,7 @@ namespace Zongsoft.Web.Http
 			routeData.Values["area"] = areaName;
 			routeData.Values["controller.path"] = controllerPath;
 
-			var descriptor = new PluginHttpControllerDescriptor(request.GetConfiguration(), node);
+			var descriptor = new PluginHttpControllerDescriptor(request.GetConfiguration(), node, (string)action, routeData);
 
 			descriptor.Properties["route.area"] = areaName;
 			descriptor.Properties["http.method"] = request.Method.Method;
