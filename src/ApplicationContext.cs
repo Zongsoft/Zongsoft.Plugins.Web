@@ -28,8 +28,6 @@ using System;
 using System.IO;
 using System.Web;
 
-using Zongsoft.Plugins;
-
 namespace Zongsoft.Plugins.Web
 {
 	public class ApplicationContext : Zongsoft.Plugins.PluginApplicationContext
@@ -43,10 +41,9 @@ namespace Zongsoft.Plugins.Web
 		private Zongsoft.Options.Configuration.OptionConfiguration _configuration;
 		#endregion
 
-		#region 保护构造
-		protected ApplicationContext() : base("Zongsoft.Plugins.Web")
+		#region 构造函数
+		private ApplicationContext() : base("Zongsoft.Plugins.Web")
 		{
-			Zongsoft.ComponentModel.ApplicationContextBase.Current = this;
 		}
 		#endregion
 
@@ -84,7 +81,7 @@ namespace Zongsoft.Plugins.Web
 					string filePaht = Path.Combine(this.ApplicationDirectory, "Web.option");
 
 					if(File.Exists(filePaht))
-						_configuration = Options.Configuration.OptionConfiguration.Load(filePaht);
+						_configuration = Zongsoft.Options.Configuration.OptionConfiguration.Load(filePaht);
 					else
 						_configuration = new Options.Configuration.OptionConfiguration(filePaht);
 				}
@@ -98,10 +95,6 @@ namespace Zongsoft.Plugins.Web
 			get
 			{
 				return HttpContext.Current.User;
-			}
-			set
-			{
-				HttpContext.Current.User = value;
 			}
 		}
 
