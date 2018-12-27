@@ -83,7 +83,7 @@ namespace Zongsoft.Web.Http
 		#region 重写方法
 		public override IHttpController CreateController(System.Net.Http.HttpRequestMessage request)
 		{
-			return _controllerNode.UnwrapValue<IHttpController>(ObtainMode.Alway, request, null);
+			return _controllerNode.UnwrapValue(ObtainMode.Alway) as IHttpController;
 		}
 		#endregion
 	}

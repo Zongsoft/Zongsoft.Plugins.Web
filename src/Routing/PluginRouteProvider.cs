@@ -83,7 +83,7 @@ namespace Zongsoft.Web.Routing
 				if(child.NodeType == Zongsoft.Plugins.PluginTreeNodeType.Empty)
 					continue;
 
-				var route = child.UnwrapValue<RouteToken>(Zongsoft.Plugins.ObtainMode.Auto);
+				var route = child.UnwrapValue(Zongsoft.Plugins.ObtainMode.Auto) as RouteToken;
 
 				if(route != null)
 				{
