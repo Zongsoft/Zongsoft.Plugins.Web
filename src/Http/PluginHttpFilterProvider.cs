@@ -37,7 +37,7 @@ namespace Zongsoft.Web.Http
 	public class PluginHttpFilterProvider : PluginFilterProviderBase<FilterInfo>, System.Web.Http.Filters.IFilterProvider
 	{
 		#region 构造函数
-		public PluginHttpFilterProvider(PluginContext pluginContext) : base(pluginContext)
+		public PluginHttpFilterProvider(PluginContext pluginContext) : base(pluginContext, "/Workspace/Web/Api/Filters")
 		{
 		}
 		#endregion
