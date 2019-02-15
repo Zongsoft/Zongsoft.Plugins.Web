@@ -56,8 +56,9 @@ namespace Zongsoft.Web.Http
 					if(string.Equals(child.Name, actionName, StringComparison.OrdinalIgnoreCase))
 					{
 						route.Values["controller"] = controllerNode.Name + "." + child.Name;
-						route.Values["action"] = null;
 						route.Values["controller.path"] = child.FullPath;
+
+						ExchangeAction(route.Values);
 
 						_controllerNode = child;
 						this.ControllerName = child.Name;
@@ -84,6 +85,37 @@ namespace Zongsoft.Web.Http
 		public override IHttpController CreateController(System.Net.Http.HttpRequestMessage request)
 		{
 			return _controllerNode.UnwrapValue(ObtainMode.Alway) as IHttpController;
+		}
+		#endregion
+
+		#region 私有方法
+		private static void ExchangeAction(IDictionary<string, object> routes)
+		{
+			if(routes.TryGetValue("id", out var value) && IsIdentifier(value as string))
+			{
+				routes["action"] = value;
+				routes["id"] = null;
+			}
+			else
+			{
+				routes["action"] = null;
+			}
+		}
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		private static bool IsIdentifier(string text)
+		{
+			//如果文本为空或者首字符不是下划线也不是字母，则说明该文本为无效的标识符
+			if(string.IsNullOrEmpty(text) || (text[0] != '_' && !char.IsLetter(text[0])))
+				return false;
+
+			for(int i = 1; i < text.Length; i++)
+			{
+				if(!char.IsLetterOrDigit(text[i]) && text[i] != '_')
+					return false;
+			}
+
+			return true;
 		}
 		#endregion
 	}
