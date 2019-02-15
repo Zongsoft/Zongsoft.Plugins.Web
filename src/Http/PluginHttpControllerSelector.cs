@@ -2,7 +2,7 @@
  * Authors:
  *   钟峰(Popeye Zhong) <zongsoft@gmail.com>
  *
- * Copyright (C) 2011-2016 Zongsoft Corporation <http://www.zongsoft.com>
+ * Copyright (C) 2011-2018 Zongsoft Corporation <http://www.zongsoft.com>
  *
  * This file is part of Zongsoft.Plugins.Web.
  *
@@ -101,12 +101,73 @@ namespace Zongsoft.Web.Http
 			routeData.Values["area"] = areaName;
 			routeData.Values["controller.path"] = controllerPath;
 
-			var descriptor = new PluginHttpControllerDescriptor(request.GetConfiguration(), node, (string)action, routeData);
+			//如果显式指定了动作名并且当前控制器节点有子节点，则进行子控制器的匹配
+			if(action is string actionName && actionName.Length > 0 && node.Children.Count > 0)
+			{
+				foreach(var child in node.Children)
+				{
+					if(string.Equals(child.Name, actionName, StringComparison.OrdinalIgnoreCase))
+					{
+						routeData.Values["controller"] = node.Name + "." + child.Name;
+						routeData.Values["controller.path"] = child.FullPath;
+
+						//修正子控制器的路由信息
+						AmendRoutes(request.Method.Method, routeData.Values);
+
+						//将控制器节点更改为匹配的子节点
+						node = child;
+
+						break;
+					}
+				}
+			}
+
+			var descriptor = new PluginHttpControllerDescriptor(request.GetConfiguration(), node);
 
 			descriptor.Properties["route.area"] = areaName;
 			descriptor.Properties["http.method"] = request.Method.Method;
 
 			return descriptor;
+		}
+		#endregion
+
+		#region 私有方法
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		private static void AmendRoutes(string method, IDictionary<string, object> routes)
+		{
+			routes["action"] = null;
+
+			if(routes.TryGetValue("id", out var value) && IsIdentifier(value as string))
+			{
+				routes["action"] = value;
+				routes["id"] = null;
+			}
+			else if(string.Equals(method, "PATCH", StringComparison.OrdinalIgnoreCase) && routes.TryGetValue("args", out value) && value != null)
+			{
+				var parts = ((string)value).Split('/');
+
+				if(parts.Length > 1 && IsIdentifier(parts[0]))
+				{
+					routes["action"] = parts[0];
+					routes["args"] = string.Join("/", parts, 1, parts.Length - 1);
+				}
+			}
+		}
+
+		[System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+		private static bool IsIdentifier(string text)
+		{
+			//如果文本为空或者首字符不是下划线也不是字母，则说明该文本为无效的标识符
+			if(string.IsNullOrEmpty(text) || (text[0] != '_' && !char.IsLetter(text[0])))
+				return false;
+
+			for(int i = 1; i < text.Length; i++)
+			{
+				if(!char.IsLetterOrDigit(text[i]) && text[i] != '_')
+					return false;
+			}
+
+			return true;
 		}
 		#endregion
 	}
