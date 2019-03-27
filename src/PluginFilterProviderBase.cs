@@ -130,7 +130,7 @@ namespace Zongsoft.Web
 
 				T filter = null;
 
-				if(child.Properties.TryGetValue("action", out var value) && value is string)
+				if(child.Properties.TryGetValue("action", typeof(string), out var value) && value is string)
 				{
 					if(string.Equals(actionName, (string)value, StringComparison.OrdinalIgnoreCase))
 						filter = this.CreateFilter(child, FilterScope.Action);

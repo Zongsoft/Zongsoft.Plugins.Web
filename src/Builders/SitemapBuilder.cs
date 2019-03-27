@@ -145,7 +145,7 @@ namespace Zongsoft.Plugins.Web.Builders
 						return foundNode;
 				}
 
-				var treeNode = node.UnwrapValue(ObtainMode.Auto, new BuilderSettings(this)) as Zongsoft.Web.Controls.TreeViewNode;
+				var treeNode = node.UnwrapValue(ObtainMode.Auto) as Zongsoft.Web.Controls.TreeViewNode;
 
 				if(treeNode != null)
 				{
@@ -184,7 +184,7 @@ namespace Zongsoft.Plugins.Web.Builders
 
 				foreach(var node in nodes)
 				{
-					var treeNode = node.UnwrapValue(ObtainMode.Auto, new BuilderSettings(this)) as Zongsoft.Web.Controls.TreeViewNode;
+					var treeNode = node.UnwrapValue(ObtainMode.Auto) as Zongsoft.Web.Controls.TreeViewNode;
 
 					if(treeNode != null)
 					{

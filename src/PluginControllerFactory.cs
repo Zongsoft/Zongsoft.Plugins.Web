@@ -62,7 +62,7 @@ namespace Zongsoft.Web
 			if(node == null || node.NodeType == PluginTreeNodeType.Empty)
 				throw new HttpException(404, "Not found." + Environment.NewLine + requestContext.HttpContext.Request.RawUrl);
 
-			var value = node.UnwrapValue(ObtainMode.Alway, new Plugins.Builders.BuilderSettings(this));
+			var value = node.UnwrapValue(ObtainMode.Alway);
 
 			if(value != null && typeof(Delegate).IsAssignableFrom(value.GetType()))
 				value = ((Delegate)value).DynamicInvoke();

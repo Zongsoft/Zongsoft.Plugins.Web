@@ -196,7 +196,7 @@ namespace Zongsoft.Web
 
 					Control placeControl = this.FindPlaceControl(page, place);
 					if(placeControl != null)
-						childNode.UnwrapValue(ObtainMode.Alway, new Plugins.Builders.BuilderSettings(placeControl));
+						childNode.UnwrapValue(ObtainMode.Alway);
 				}
 			}
 		}

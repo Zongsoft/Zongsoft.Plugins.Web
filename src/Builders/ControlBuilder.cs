@@ -61,7 +61,7 @@ namespace Zongsoft.Plugins.Web.Builders
 				return;
 
 			itemControl.ID = context.Builtin.Name;
-			Control ownerControl = context.Owner as Control ?? context.Settings?.Parameter as Control;
+			Control ownerControl = context.Owner as Control;
 
 			if(ownerControl == null)
 				return;
